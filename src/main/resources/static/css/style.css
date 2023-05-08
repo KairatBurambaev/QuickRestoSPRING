@@ -1,0 +1,6 @@
+table {
+    margin: auto;
+    width: 50%;
+    border: 3px solid rgba(17, 29, 161, 0.3);
+    padding: 10px;
+}

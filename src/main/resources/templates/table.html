@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Table Example</title>
+</head>
+<body>
+<h1>Table Example</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        <th th:each="col : ${#numbers.sequence(0, table.columns - 1)}">
+            <span th:text="${#strings.toUpperCase('abcdefghijklmnopqrstuvwxyz'.substring(col, col+1))}"></span>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="row : ${#numbers.sequence(0, table.rows - 1)}">
+        <td th:text="${row}"></td>
+        <td th:each="col : ${#numbers.sequence(0, table.columns - 1)}">
+            <span th:text="${table.getData(row,col)}"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
