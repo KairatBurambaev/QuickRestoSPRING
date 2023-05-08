@@ -1,14 +1,23 @@
-package com.quickresto.models;
+package com.quickresto.project;
 
 public class Table {
+    public static int SIZE = 4;
     private int rows;
     private int columns;
     private String[][] data;
 
-    public Table(int rows, int columns) {
-        this.rows = rows;
-        this.columns = columns;
+    public Table() {
+        this.rows = SIZE;
+        this.columns = SIZE;
         this.data = new String[rows][columns];
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
+                char letter = (char) ('A' + col);
+                String value = String.format("%s%d", letter, row + 1);
+                data[row][col] = value;
+            }
+        }
     }
 
     public int getRows() {
