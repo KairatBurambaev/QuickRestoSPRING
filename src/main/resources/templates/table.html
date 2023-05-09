@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Table Example</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-<h1>Table Example</h1>
-
+<form action="/" method="post">
+    <input type="submit">Кнопка</input>
 <table>
     <thead>
     <tr>
@@ -18,12 +18,13 @@
     </thead>
     <tbody>
     <tr th:each="row : ${#numbers.sequence(0, table.rows - 1)}">
-        <td th:text="${row}"></td>
+        <td th:text="${row+1}"></td>
         <td th:each="col : ${#numbers.sequence(0, table.columns - 1)}">
-            <span th:text="${table.getData(row,col)}"></span>
+            <input type="text" th:name="${row}" th:value="${table.getData(row,col)}"></input>
         </td>
     </tr>
     </tbody>
 </table>
+</form>
 </body>
 </html>

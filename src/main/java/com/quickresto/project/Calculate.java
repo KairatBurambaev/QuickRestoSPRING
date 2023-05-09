@@ -121,12 +121,12 @@ public class Calculate {
         for (int i = 0; i < input.getRows(); i++) {
             for (int j = 0; j < input.getColumns(); j++) {
                 str = input.getData(i, j);
-                if (str.charAt(0) != '=') {
+                if (str.isEmpty() || str.charAt(0) != '=') {
                     continue;
                 } else {
                     List<MathSymbol> mathSymbols = MathAnalyze(str.substring(1), input);
                     MathBuffer mathBuffer =  new MathBuffer(mathSymbols);
-                    System.out.println(expr(mathBuffer));
+                    input.setData(i, j,String.valueOf(expr(mathBuffer)));
                 }
             }
         }
@@ -211,7 +211,7 @@ public class Calculate {
                 double value = factor(mathSymbols);
                 return -value;
             case  NUMBER:
-                return Integer.parseInt(mathSymbol.value);
+                return Double.parseDouble(mathSymbol.value);
             case LEFT_BRACE:
                 value = expr(mathSymbols);
                 mathSymbol = mathSymbols.next();
