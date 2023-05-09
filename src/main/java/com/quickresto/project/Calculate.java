@@ -11,31 +11,31 @@ public class Calculate {
         while (pos < inpText.length()) {
             char s = inpText.charAt(pos);
             switch (s) {
-                case '(':
+                case '(' -> {
                     mathSymbols.add(new MathSymbol(Math.LEFT_BRACE, s));
                     pos++;
-                    continue;
-                case ')':
+                }
+                case ')' -> {
                     mathSymbols.add(new MathSymbol(Math.RIGHT_BRACE, s));
                     pos++;
-                    continue;
-                case '+':
+                }
+                case '+' -> {
                     mathSymbols.add(new MathSymbol(Math.OP_PLUS, s));
                     pos++;
-                    continue;
-                case '-':
+                }
+                case '-' -> {
                     mathSymbols.add(new MathSymbol(Math.OP_MINUS, s));
                     pos++;
-                    continue;
-                case '*':
+                }
+                case '*' -> {
                     mathSymbols.add(new MathSymbol(Math.OP_MUL, s));
                     pos++;
-                    continue;
-                case '/':
+                }
+                case '/' -> {
                     mathSymbols.add(new MathSymbol(Math.OP_DIV, s));
                     pos++;
-                    continue;
-                default:
+                }
+                default -> {
                     if (s <= '9' && s >= '0') {
                         StringBuilder sb = new StringBuilder();
                         do {
@@ -68,10 +68,11 @@ public class Calculate {
                             mathSymbols.add(new MathSymbol(Math.NUMBER, linka));
                         } else {
                             List<MathSymbol> mathSymbols1 = MathAnalyze(linka.substring(1), input);
-                            MathBuffer mathBuffer1 =  new MathBuffer(mathSymbols1);
+                            MathBuffer mathBuffer1 = new MathBuffer(mathSymbols1);
                             mathSymbols.add(new MathSymbol(Math.NUMBER, String.valueOf(expr(mathBuffer1))));
                         }
                     }
+                }
             }
         }
         mathSymbols.add(new MathSymbol(Math.EOF, ""));
@@ -83,8 +84,7 @@ public class Calculate {
         for (int i = 0; i < input.getRows(); i++) {
             for (int j = 0; j < input.getColumns(); j++) {
                 str = input.getData(i, j);
-                if (str.isEmpty() || str.charAt(0) != '=') {
-                } else {
+                if (!str.isEmpty() && str.charAt(0) == '=') {
                     List<MathSymbol> mathSymbols = MathAnalyze(str.substring(1), input);
                     MathBuffer mathBuffer = new MathBuffer(mathSymbols);
                     double dub = expr(mathBuffer);
@@ -128,15 +128,13 @@ public class Calculate {
         while (true) {
             MathSymbol mathSymbol = mathSymbols.next();
             switch (mathSymbol.type) {
-                case OP_PLUS:
-                    value += multdiv(mathSymbols);
-                    break;
-                case OP_MINUS:
-                    value -= multdiv(mathSymbols);
-                    break;
-                default:
+                case LEFT_BRACE -> value *= plusminus(mathSymbols);
+                case OP_PLUS -> value += multdiv(mathSymbols);
+                case OP_MINUS -> value -= multdiv(mathSymbols);
+                default -> {
                     mathSymbols.back();
                     return value;
+                }
             }
         }
     }
@@ -156,15 +154,12 @@ public class Calculate {
         while (true) {
             MathSymbol mathSymbol = mathSymbols.next();
             switch (mathSymbol.type) {
-                case OP_MUL:
-                    value *= factor(mathSymbols);
-                    break;
-                case OP_DIV:
-                    value /= factor(mathSymbols);
-                    break;
-                default:
+                case OP_MUL -> value *= factor(mathSymbols);
+                case OP_DIV -> value /= factor(mathSymbols);
+                default -> {
                     mathSymbols.back();
                     return value;
+                }
             }
         }
     }
