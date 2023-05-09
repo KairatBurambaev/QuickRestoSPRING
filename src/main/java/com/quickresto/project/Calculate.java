@@ -6,7 +6,7 @@ import java.util.List;
 public class Calculate {
     public static List<MathSymbol> MathAnalyze(String inpText, Table input) {
         ArrayList<MathSymbol> mathSymbols = new ArrayList<>();
-        String ABCD = "ABCD";
+        String ABCD = "ABCDabcd";
         int pos = 0;
         while (pos < inpText.length()) {
             char s = inpText.charAt(pos);
@@ -49,58 +49,57 @@ public class Calculate {
                         mathSymbols.add(new MathSymbol(Math.NUMBER, sb.toString()));
                     } else if (ABCD.contains(String.valueOf(s))) {
                         StringBuilder sb = new StringBuilder();
+                        char t = Character.toUpperCase(s);
                         do {
-                            sb.append(s);
+                            sb.append(t);
                             pos++;
                             if (pos >= inpText.length()) {
                                 break;
                             }
-                            s = inpText.charAt(pos);
-                        } while (s <= '9' && s >= '0');
+                            t = inpText.charAt(pos);
+                        } while (t <= '9' && t >= '0');
                         String linka;
                         int column = sb.charAt(0) - 'A';
                         int row = sb.charAt(1) - '1';
-                            linka = input.getData(row, column);
-                            if (linka.isEmpty()) {
-                                mathSymbols.add(new MathSymbol(Math.NUMBER, "0"));
-                            } else if (linka.charAt(0) != '=') {
-                                mathSymbols.add(new MathSymbol(Math.NUMBER, linka));
-                                continue;
-                            } else {
-                                List<MathSymbol> mathSymbols1 = MathAnalyze(linka.substring(1), input);
-                                MathBuffer mathBuffer1 =  new MathBuffer(mathSymbols1);
-                                mathSymbols.add(new MathSymbol(Math.NUMBER, String.valueOf(expr(mathBuffer1))));
-                            }
-                            continue;
+                        linka = input.getData(row, column);
+                        if (linka.isEmpty()) {
+                            mathSymbols.add(new MathSymbol(Math.NUMBER, "0"));
+                        } else if (linka.charAt(0) != '=') {
+                            mathSymbols.add(new MathSymbol(Math.NUMBER, linka));
+                        } else {
+                            List<MathSymbol> mathSymbols1 = MathAnalyze(linka.substring(1), input);
+                            MathBuffer mathBuffer1 =  new MathBuffer(mathSymbols1);
+                            mathSymbols.add(new MathSymbol(Math.NUMBER, String.valueOf(expr(mathBuffer1))));
+                        }
                     }
             }
         }
         mathSymbols.add(new MathSymbol(Math.EOF, ""));
         return mathSymbols;
     }
+
     public static Table calculate(Table input) {
         String str;
-        char c;
         for (int i = 0; i < input.getRows(); i++) {
             for (int j = 0; j < input.getColumns(); j++) {
                 str = input.getData(i, j);
                 if (str.isEmpty() || str.charAt(0) != '=') {
-                    continue;
                 } else {
                     List<MathSymbol> mathSymbols = MathAnalyze(str.substring(1), input);
-                    MathBuffer mathBuffer =  new MathBuffer(mathSymbols);
-                    input.setData(i, j,String.valueOf(expr(mathBuffer)));
+                    MathBuffer mathBuffer = new MathBuffer(mathSymbols);
+                    double dub = expr(mathBuffer);
+                    if (dub == (int) dub) {
+                        int res = (int) dub;
+                        input.setData(i, j, String.valueOf(res));
+                    } else {
+                        input.setData(i, j, String.valueOf(dub));
+                    }
                 }
             }
         }
         return input;
     }
 
-//    public static Table calcTable(Table input) {
-//        Table inputTable = input;
-//        Table resultTable = calculate(inputTable);
-//        return resultTable;
-//    }
     public static class MathSymbol {
         Math type;
         String value;
@@ -141,6 +140,7 @@ public class Calculate {
             }
         }
     }
+
     public static double expr (MathBuffer mathSymbols) {
         MathSymbol mathSymbol = mathSymbols.next();
         if (mathSymbol.type == Math.EOF) {
@@ -150,6 +150,7 @@ public class Calculate {
             return plusminus(mathSymbols);
         }
     }
+
     public static double multdiv (MathBuffer mathSymbols) {
         double value = factor(mathSymbols);
         while (true) {
@@ -167,6 +168,7 @@ public class Calculate {
             }
         }
     }
+
     public static double factor (MathBuffer mathSymbols) {
         MathSymbol mathSymbol = mathSymbols.next();
         switch (mathSymbol.type) {

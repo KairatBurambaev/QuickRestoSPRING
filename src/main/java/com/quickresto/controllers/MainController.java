@@ -34,6 +34,7 @@ public class MainController {
                 }
             }
         Table result = Calculate.calculate(input);
+        model.addAttribute("input", input);
         model.addAttribute("table", result);
         return "table";
     }
