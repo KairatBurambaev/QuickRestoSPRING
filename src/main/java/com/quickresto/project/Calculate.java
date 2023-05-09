@@ -58,57 +58,20 @@ public class Calculate {
                             s = inpText.charAt(pos);
                         } while (s <= '9' && s >= '0');
                         String linka;
-                        String column = String.valueOf(sb.charAt(0));
-                        int row = Integer.valueOf(sb.charAt(1)) - 49;
-                        switch (column) {
-                            case "A" :
-                                linka = input.getData(row, 0);
-                                if (linka.charAt(0) != '=') {
-                                    mathSymbols.add(new MathSymbol(Math.NUMBER, linka));
-                                    continue;
-                                } else {
-                                    List<MathSymbol> mathSymbols1 = MathAnalyze(linka.substring(1), input);
-                                    MathBuffer mathBuffer1 =  new MathBuffer(mathSymbols1);
-                                    mathSymbols.add(new MathSymbol(Math.NUMBER, String.valueOf(expr(mathBuffer1))));
-                                }
+                        int column = sb.charAt(0) - 'A';
+                        int row = sb.charAt(1) - '1';
+                            linka = input.getData(row, column);
+                            if (linka.isEmpty()) {
+                                mathSymbols.add(new MathSymbol(Math.NUMBER, "0"));
+                            } else if (linka.charAt(0) != '=') {
+                                mathSymbols.add(new MathSymbol(Math.NUMBER, linka));
                                 continue;
-                            case "B" :
-                                linka = input.getData(row, 1);
-                                if (linka.charAt(0) != '=') {
-                                    mathSymbols.add(new MathSymbol(Math.NUMBER, linka));
-                                    continue;
-                                } else {
-                                    List<MathSymbol> mathSymbols1 = MathAnalyze(linka.substring(1), input);
-                                    MathBuffer mathBuffer1 =  new MathBuffer(mathSymbols1);
-                                    mathSymbols.add(new MathSymbol(Math.NUMBER, String.valueOf(expr(mathBuffer1))));
-                                }
-                                continue;
-                            case "C" :
-                                linka = input.getData(row, 2);
-                                if (linka.charAt(0) != '=') {
-                                    mathSymbols.add(new MathSymbol(Math.NUMBER, linka));
-                                    continue;
-                                } else {
-                                    List<MathSymbol> mathSymbols1 = MathAnalyze(linka.substring(1), input);
-                                    MathBuffer mathBuffer1 =  new MathBuffer(mathSymbols1);
-                                    mathSymbols.add(new MathSymbol(Math.NUMBER, String.valueOf(expr(mathBuffer1))));
-                                }
-                                continue;
-                            case "D" :
-                                linka = input.getData(row, 3);
-                                if (linka.charAt(0) != '=') {
-                                    mathSymbols.add(new MathSymbol(Math.NUMBER, linka));
-                                    continue;
-                                } else {
-                                    List<MathSymbol> mathSymbols1 = MathAnalyze(linka.substring(1), input);
-                                    MathBuffer mathBuffer1 =  new MathBuffer(mathSymbols1);
-                                    mathSymbols.add(new MathSymbol(Math.NUMBER, String.valueOf(expr(mathBuffer1))));
-                                }
-                                continue;
-                            default:
-                                System.out.println("гу епь");
-                                continue;
-                        }
+                            } else {
+                                List<MathSymbol> mathSymbols1 = MathAnalyze(linka.substring(1), input);
+                                MathBuffer mathBuffer1 =  new MathBuffer(mathSymbols1);
+                                mathSymbols.add(new MathSymbol(Math.NUMBER, String.valueOf(expr(mathBuffer1))));
+                            }
+                            continue;
                     }
             }
         }

@@ -6,7 +6,7 @@
 </head>
 <body>
 <form action="/" method="post">
-    <input type="submit">Кнопка</input>
+    <input type="submit" style="display: none">
 <table>
     <thead>
     <tr>
@@ -20,7 +20,7 @@
     <tr th:each="row : ${#numbers.sequence(0, table.rows - 1)}">
         <td th:text="${row+1}"></td>
         <td th:each="col : ${#numbers.sequence(0, table.columns - 1)}">
-            <input type="text" th:name="${row}" th:value="${table.getData(row,col)}"></input>
+            <input type="text" th:name="${row}" th:value="${table.getData(row,col)}">
         </td>
     </tr>
     </tbody>
